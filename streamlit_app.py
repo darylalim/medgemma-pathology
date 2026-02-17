@@ -1,7 +1,10 @@
+from __future__ import annotations
+
 import base64
 import io
 import os
 import random
+from typing import Any
 
 import numpy as np
 import PIL.Image
@@ -67,9 +70,7 @@ MODEL_ID = "google/medgemma-1.5-4b-it"
 
 
 @st.cache_resource
-def load_model(
-    hf_token: str,
-) -> tuple[transformers.AutoProcessor, transformers.AutoModelForImageTextToText]:
+def load_model(hf_token: str) -> tuple[Any, Any]:
     """Load MedGemma model and processor, cached across reruns."""
     device, dtype = detect_device()
     model_kwargs = dict(
@@ -87,8 +88,8 @@ def load_model(
 
 
 def run_inference(
-    processor: transformers.AutoProcessor,
-    model: transformers.AutoModelForImageTextToText,
+    processor: Any,
+    model: Any,
     messages: list[dict],
 ) -> str:
     """Run MedGemma inference and return the response text."""
