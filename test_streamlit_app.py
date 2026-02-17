@@ -3,7 +3,7 @@ import base64
 import numpy as np
 from PIL import Image
 
-from streamlit_app import detect_device, encode_patch, extract_patches
+from streamlit_app import build_messages, detect_device, encode_patch, extract_patches
 
 
 class TestExtractPatches:
@@ -43,6 +43,26 @@ class TestEncodePatch:
         b64_data = result.split(",", 1)[1]
         decoded = base64.b64decode(b64_data)
         assert len(decoded) > 0
+
+
+class TestBuildMessages:
+    def test_returns_correct_structure(self) -> None:
+        patches = [np.zeros((100, 100, 3), dtype=np.uint8)]
+        prompt = "Describe this tissue."
+        messages = build_messages(patches, prompt)
+        assert len(messages) == 1
+        assert messages[0]["role"] == "user"
+        content = messages[0]["content"]
+        assert content[0]["type"] == "text"
+        assert content[0]["text"] == prompt
+        assert content[1]["type"] == "image"
+        assert content[1]["image"].startswith("data:image/jpeg;base64,")
+
+    def test_includes_all_patches(self) -> None:
+        patches = [np.zeros((50, 50, 3), dtype=np.uint8) for _ in range(5)]
+        messages = build_messages(patches, "test")
+        content = messages[0]["content"]
+        assert len(content) == 6  # 1 text + 5 images
 
 
 class TestDetectDevice:

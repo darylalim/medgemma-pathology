@@ -42,3 +42,11 @@ def encode_patch(data: np.ndarray) -> str:
             img.save(buf, format="jpeg")
             b64 = base64.b64encode(buf.getvalue()).decode("utf-8")
     return f"data:image/jpeg;base64,{b64}"
+
+
+def build_messages(patches: list[np.ndarray], prompt: str) -> list[dict]:
+    """Build chat-completion messages with images from patches."""
+    content: list[dict] = [{"type": "text", "text": prompt}]
+    for patch in patches:
+        content.append({"type": "image", "image": encode_patch(patch)})
+    return [{"role": "user", "content": content}]
