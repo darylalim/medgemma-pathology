@@ -1,0 +1,14 @@
+# Environment
+.env
+.venv/
+
+# Python
+__pycache__/
+
+# Tools
+.pytest_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
