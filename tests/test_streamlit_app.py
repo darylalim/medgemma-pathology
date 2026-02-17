@@ -3,7 +3,7 @@ import base64
 import numpy as np
 from PIL import Image
 
-from streamlit_app import build_messages, detect_device, encode_patch, extract_patches
+from streamlit_app import build_messages, encode_patch, extract_patches
 
 
 class TestExtractPatches:
@@ -63,10 +63,3 @@ class TestBuildMessages:
         messages = build_messages(patches, "test")
         content = messages[0]["content"]
         assert len(content) == 6  # 1 text + 5 images
-
-
-class TestDetectDevice:
-    def test_returns_tuple(self) -> None:
-        device, dtype = detect_device()
-        assert isinstance(device, str)
-        assert device in ("mps", "cuda", "cpu")
